@@ -1,0 +1,98 @@
+#include <stdio.h>
+
+int main() {
+    float limite, temperatura;
+    float soma = 0, media = 0, maior, menor;
+    int total_leituras = 0;
+    int acima_limite_total = 0;
+    int consecutivas = 0;
+    int primeira_leitura = 1;
+    int continuar = 1;
+
+    printf("=== SISTEMA DE MONITORAMENTO DE TEMPERATURA ===\n\n");
+
+    do {
+        printf("Digite o limite de temperatura permitido (> 0): ");
+        if (scanf("%f", &limite) != 1 || limite <= 0) {
+            printf("[ERRO] O limite deve ser um valor numerico maior que zero. Tente novamente.\n");
+            // Limpa o buffer do teclado em caso de entrada invalida
+            while (getchar() != '\n');
+        } else {
+            break;
+        }
+    } while (1);
+
+    printf("\nLimite definido com sucesso: %.2f C\n", limite);
+    printf("Insira as temperaturas registradas. Digite uma temperatura valida.\n\n");
+
+  
+    do {
+       
+        do {
+            printf("Digite a temperatura da leitura %d: ", total_leituras + 1);
+            if (scanf("%f", &temperatura) != 1) {
+                printf("[ERRO] Entrada invalida. Digite um numero valido.\n");
+                while (getchar() != '\n');
+            } else {
+                break;
+            }
+        } while (1);
+
+       
+        if (primeira_leitura) {
+            maior = temperatura;
+            menor = temperatura;
+            primeira_leitura = 0;
+        } else {
+            if (temperatura > maior) maior = temperatura;
+            if (temperatura < menor) menor = temperatura;
+        }
+
+        soma += temperatura;
+        total_leituras++;
+
+       
+        if (temperatura > limite) {
+            acima_limite_total++;
+            consecutivas++;
+            printf("-> Alerta: Temperatura acima do limite! (Consecutivas: %d/3)\n", consecutivas);
+        } else {
+            
+            consecutivas = 0;
+        }
+
+
+        if (consecutivas >= 3) {
+            printf("\n[ALERTA CRITICO] 3 temperaturas consecutivas acima do limite detectadas. Encerrando monitoramento!\n");
+            continuar = 0;
+        } else {
+            char resposta;
+            printf("Deseja continuar inserindo leituras? (s/n): ");
+            scanf(" %c", &resposta);
+            if (resposta == 'n' || resposta == 'N') {
+                continuar = 0;
+            }
+        }
+        printf("--------------------------------------------------\n");
+
+    } while (continuar);
+
+   
+    printf("\n================ RELATORIO FINAL ================\n");
+    if (total_leituras > 0) {
+        media = soma / total_leituras;
+        float percentual_acima = ((float)acima_limite_total / total_leituras) * 100;
+
+        printf("Total de leituras realizadas: %d\n", total_leituras);
+        printf("Temperatura media: %.2f C\n", media);
+        printf("Maior temperatura registrada: %.2f C\n", maior);
+        printf("Menor temperatura registrada: %.2f C\n", menor);
+        printf("Total de leituras acima do limite: %d\n", acima_limite_total);
+        printf("Percentual de leituras acima do limite: %.2f%%\n", percentual_acima);
+    } else {
+        printf("Nenhuma leitura registrada.\n");
+    }
+    printf("==================================================\n");
+
+    return 0;
+}
