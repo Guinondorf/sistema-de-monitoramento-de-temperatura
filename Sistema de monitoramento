@@ -15,7 +15,7 @@ int main() {
         printf("Digite o limite de temperatura permitido (> 0): ");
         if (scanf("%f", &limite) != 1 || limite <= 0) {
             printf("[ERRO] O limite deve ser um valor numerico maior que zero. Tente novamente.\n");
-            // Limpa o buffer do teclado em caso de entrada invalida
+            
             while (getchar() != '\n');
         } else {
             break;
